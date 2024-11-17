@@ -7,8 +7,16 @@ A tiny Python no-string package for performing translation of a massive `CSV`/`J
     https://github.com/nicolay-r/bulk-translate/issues/1
 - [ ] Describe features of the Translator PipelineItem implementation: `fast-mode` and `accurate`
 
+## Installation
+
 ```bash
-python translate.py \
+pip install git+https://github.com/nicolay-r/bulk-translate
+```
+
+## Usage
+
+```bash
+python -m bulk_translate.translate \
     --src "test/data/test.tsv" \
     --prompt "{text}" \
     --adapter "dynamic:models/googletrans_310a.py:GoogleTranslateModel" \
