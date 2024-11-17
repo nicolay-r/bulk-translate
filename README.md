@@ -1,4 +1,9 @@
 # bulk-translate 0.24.1
+![](https://img.shields.io/badge/Python-3.9-brightgreen.svg)
+![](https://img.shields.io/badge/AREkit-0.25.0-orange.svg)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/nicolay-r/bulk-translate/blob/master/bulk_translate_demo.ipynb)
+
+
 A tiny Python no-string package for performing translation of a massive `CSV`/`JSONL` files
 
 **TODO:**
