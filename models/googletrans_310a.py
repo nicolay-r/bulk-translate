@@ -5,7 +5,7 @@ from googletrans import Translator
 
 class GoogleTranslateModel(object):
 
-    def __init__(self):
+    def __init__(self, **kwargs):
         self._instance = Translator()
 
     @staticmethod
@@ -25,7 +25,7 @@ class GoogleTranslateModel(object):
 
         raise Exception("Can't translate")
 
-    def get_func(self, src, dest):
+    def get_func(self, src, dest, **kwargs):
         # We do auto-import so we not depend on the actually installed library.
         # Translation of the list of data.
         # Returns the list of strings.
