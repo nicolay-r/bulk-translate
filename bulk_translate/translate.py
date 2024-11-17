@@ -112,7 +112,7 @@ if __name__ == '__main__':
             batch_translate_model=translation_model.get_func(**custom_args_dict),
             do_translate_entity=args.translate_entity,
             src_func=lambda item: [item] if not args.parse_entities else item),
-        MapPipelineItem(map_func=lambda term: term.DisplayValue if isinstance(term, Entity) else term),
+        MapPipelineItem(map_func=lambda term: [term.DisplayValue] if isinstance(term, Entity) else term),
         BasePipelineItem(src_func=lambda src: list(src))
     ]
 
