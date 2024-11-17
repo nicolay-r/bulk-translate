@@ -7,10 +7,14 @@ from tqdm import tqdm
 from source_iter.service_csv import CsvService
 from source_iter.service_jsonl import JsonlService
 
+from arekit.common.data.input.providers.const import IDLE_MODE
+from arekit.common.entities.base import Entity
 from arekit.common.pipeline.batching import BatchingPipelineLauncher
 from arekit.common.pipeline.context import PipelineContext
 from arekit.common.pipeline.utils import BatchIterator
-from arekit.common.data.input.providers.const import IDLE_MODE
+from arekit.common.pipeline.items.base import BasePipelineItem
+from arekit.common.pipeline.items.map import MapPipelineItem
+from arekit.contrib.utils.pipelines.items.text.entities_default import TextEntitiesParser
 
 from bulk_translate.src.pipeline.translator import MLTextTranslatorPipelineItem
 from bulk_translate.src.service_args import CmdArgsService
@@ -54,6 +58,8 @@ if __name__ == '__main__':
     parser.add_argument('--del-meta', dest="del_meta", type=list, default=["parent_ctx"])
     parser.add_argument('--src', dest='src', type=str, default=None)
     parser.add_argument('--output', dest='output', type=str, default=None)
+    parser.add_argument('--parse-entities', action='store_true', default=False)
+    parser.add_argument('--translate-entity', action='store_true', default=False)
     parser.add_argument('--chunk-limit', dest='chunk_limit', type=int, default=128)
 
     native_args, model_args = CmdArgsService.partition_list(lst=sys.argv, sep="%%")
@@ -101,12 +107,13 @@ if __name__ == '__main__':
     translation_model = models_preset["dynamic"]()
 
     pipeline = [
+        TextEntitiesParser(src_func=lambda text: text.split()) if args.parse_entities else None,
         MLTextTranslatorPipelineItem(
             batch_translate_model=translation_model.get_func(**custom_args_dict),
-            do_translate_entity=False,
-            # We cast data to the list since it is supposed to be content that OPTIONALLY
-            # include entities mention.
-            src_func=lambda item: [item])
+            do_translate_entity=args.translate_entity,
+            src_func=lambda item: [item] if not args.parse_entities else item),
+        MapPipelineItem(map_func=lambda term: term.DisplayValue if isinstance(term, Entity) else term),
+        BasePipelineItem(src_func=lambda src: list(src))
     ]
 
     _, src_ext, _ = parse_filepath(args.src)

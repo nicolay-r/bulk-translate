@@ -20,16 +20,22 @@ pip install git+https://github.com/nicolay-r/bulk-translate
 
 ## Usage
 
+> **NOTE:** If you wish to translate parse entities, you can use `parse-entities` flag
+
+For the following [`test.tsv` example data](/test/data/test.tsv) with annotated entities enclosed in square brackets:
+
 ```bash
 python -m bulk_translate.translate \
     --src "test/data/test.tsv" \
     --prompt "{text}" \
     --adapter "dynamic:models/googletrans_310a.py:GoogleTranslateModel" \
     --output "test-translated.jsonl" \
+    --parse-entities \
     %% \
     --src "auto" \
     --dest "ru"
 ```
+
 
 ## Powered by
 
