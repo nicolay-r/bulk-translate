@@ -7,18 +7,18 @@
 A tiny Python no-string package for performing translation of a massive `CSV`/`JSONL` files that 
 natively provides support for annotating **fixed-spans** that are optionally invariant for translator.
 
+The out-of-the box features of the `bulk-translate` are:
+* ✅ Support of the `spans` for annotation / optional translation.
+* ✅ Native Implementation of two translation modes:
+  - `fast-mode`: exploits extra chars that could be used for grouping all the text parts into single batch with further deconstruction.
+  - `accurate`: pefroms individual translation of each text part.
+* ✅ No strings: you're free to adopt any LM / LLM backend.
+  - Support `googletrans` by default.
   
 <p align="center">
     <img src="example.png"  width="600"/>
 </p>
 
-The out-of-the box features of the `bulk-translate` are: 
-* ✅ Support of the `spans` for annotation / optional translation.
-* ✅ Native Implementation of two translation modes:
-  - `fast-mode`: exploits extra chars that could be used for grouping all the text parts into single batch with further deconstruction. 
-  - `accurate`: pefroms individual translation of each text part.
-* ✅ No strings: you're free to adopt any LM / LLM backend.
-     - Support `googletrans` by default.
 
 ## Installation
 
