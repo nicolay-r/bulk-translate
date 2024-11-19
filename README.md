@@ -9,7 +9,7 @@ natively provides support for annotating **fixed-spans** that are optionally inv
 
   
 <p align="center">
-    <img src="example.png"/>
+    <img src="example.png"  width="600"/>
 </p>
 
 The out-of-the box features of the `bulk-translate` are: 
