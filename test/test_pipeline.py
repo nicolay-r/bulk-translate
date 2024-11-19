@@ -2,6 +2,7 @@ import unittest
 from os.path import dirname, realpath, join
 
 from arekit.common.data.input.providers.const import IDLE_MODE
+from arekit.common.entities.base import Entity
 from arekit.common.pipeline.batching import BatchingPipelineLauncher
 from arekit.common.pipeline.context import PipelineContext
 from arekit.contrib.utils.pipelines.items.text.entities_default import TextEntitiesParser
@@ -30,4 +31,5 @@ class TestTranslatorPipeline(unittest.TestCase):
                               parent_ctx=PipelineContext({IDLE_MODE: False}))
 
         BatchingPipelineLauncher.run(pipeline=pipeline, pipeline_ctx=ctx, src_key="input")
-        print(ctx.provide("result"))
+        print([[item.DisplayValue] if isinstance(item, Entity) else item
+               for item in ctx.provide("result")[0]])
