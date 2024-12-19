@@ -7,38 +7,10 @@ from tqdm import tqdm
 from source_iter.service_csv import CsvService
 from source_iter.service_jsonl import JsonlService
 
-from arekit.common.entities.base import Entity
-from arekit.common.pipeline.batching import BatchingPipelineLauncher
-from arekit.common.pipeline.context import PipelineContext
-from arekit.common.pipeline.utils import BatchIterator
-from arekit.common.pipeline.items.base import BasePipelineItem
-from arekit.common.pipeline.items.map import MapPipelineItem
-from arekit.contrib.utils.pipelines.items.text.entities_default import TextEntitiesParser
-
-from bulk_translate.src.pipeline.translator import MLTextTranslatorPipelineItem
+from bulk_translate.api import Translator
 from bulk_translate.src.service_args import CmdArgsService
 from bulk_translate.src.service_dynamic import dynamic_init
-from bulk_translate.src.service_prompt import DataService
-from bulk_translate.src.utils import test_translate_demo, setup_custom_logger, iter_params, parse_filepath
-
-
-def iter_translated_data(texts_it, batch_size):
-    for batch in BatchIterator(texts_it, batch_size=batch_size):
-        index, input = zip(*batch)
-        ctx = BatchingPipelineLauncher.run(
-            pipeline=pipeline,
-            pipeline_ctx=PipelineContext(d={"index": index, "input": input}),
-            src_key="input")
-
-        # Target.
-        d = ctx._d
-
-        # Removing meta-information.
-        for m in args.del_meta:
-            del d[m]
-
-        for batch_ind in range(len(d["input"])):
-            yield {k: v[batch_ind] for k, v in d.items()}
+from bulk_translate.src.utils import test_translate_demo, setup_custom_logger, parse_filepath
 
 
 CWD = os.getcwd()
@@ -51,8 +23,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Apply Translator")
 
     parser.add_argument('--adapter', dest='adapter', type=str, default=None)
+    parser.add_argument('--batch-size', dest='batch_size', type=int, default=1)
     parser.add_argument('--prompt', dest='prompt', type=str, default="{text}")
-    parser.add_argument('--del-meta', dest="del_meta", type=list, default=["parent_ctx"])
     parser.add_argument('--src', dest='src', type=str, default=None)
     parser.add_argument('--output', dest='output', type=str, default=None)
     parser.add_argument('--parse-entities', action='store_true', default=False)
@@ -71,7 +43,9 @@ if __name__ == '__main__':
     input_formatters = {
         None: lambda _: test_translate_demo(
             iter_answers=lambda example, lang_from, lang_to:
-                iter_translated_data(texts_it=iter([(0, example)]), batch_size=1)),
+                translator.iter_translated_data(data_dict_it=iter([(0, example)]),
+                                                prompt=args.prompt,
+                                                batch_size=args.batch_size)),
         "csv": lambda filepath: CsvService.read(src=filepath, as_dict=True, skip_header=True,
                                                 delimiter=custom_args_dict.get("delimiter", ","),
                                                 escapechar=custom_args_dict.get("escapechar", None)),
@@ -101,17 +75,12 @@ if __name__ == '__main__':
     ner_model_name = params[1] if len(params) > 1 else params[-1]
     ner_model_params = ':'.join(params[2:]) if len(params) > 2 else None
 
-    translation_model = models_preset["dynamic"]()
+    translator = Translator(parse_spans=args.parse_entities,
+                            translate_spans=args.translate_entity,
+                            translation_model=models_preset["dynamic"](),
+                            **custom_args_dict)
 
-    pipeline = [
-        TextEntitiesParser(src_func=lambda text: text.split()) if args.parse_entities else None,
-        MLTextTranslatorPipelineItem(
-            batch_translate_model=translation_model.get_func(**custom_args_dict),
-            do_translate_entity=args.translate_entity,
-            src_func=lambda item: [item] if not args.parse_entities else item),
-        MapPipelineItem(map_func=lambda term: [term.DisplayValue] if isinstance(term, Entity) else term),
-        BasePipelineItem(src_func=lambda src: list(src))
-    ]
+    translation_model = models_preset["dynamic"]()
 
     _, src_ext, _ = parse_filepath(args.src)
     texts_it = input_formatters[src_ext](args.src)
@@ -120,8 +89,7 @@ if __name__ == '__main__':
     if src_ext is None:
         exit(0)
 
-    prompts_it = DataService.iter_prompt(data_dict_it=texts_it, prompt=args.prompt, parse_fields_func=iter_params)
-    ctxs_it = iter_translated_data(texts_it=prompts_it, batch_size=1)
+    ctxs_it = translator.iter_translated_data(data_dict_it=texts_it, prompt=args.prompt, batch_size=args.batch_size)
     output_formatters["jsonl"](dicts_it=tqdm(ctxs_it, desc=f"Processing `{args.src}`"))
 
     logger.info(f"Saved: {args.output}")
