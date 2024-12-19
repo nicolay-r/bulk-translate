@@ -7,7 +7,6 @@ from tqdm import tqdm
 from source_iter.service_csv import CsvService
 from source_iter.service_jsonl import JsonlService
 
-from arekit.common.data.input.providers.const import IDLE_MODE
 from arekit.common.entities.base import Entity
 from arekit.common.pipeline.batching import BatchingPipelineLauncher
 from arekit.common.pipeline.context import PipelineContext
@@ -28,9 +27,7 @@ def iter_translated_data(texts_it, batch_size):
         index, input = zip(*batch)
         ctx = BatchingPipelineLauncher.run(
             pipeline=pipeline,
-            pipeline_ctx=PipelineContext(
-                d={"index": index, "input": input},
-                parent_ctx=PipelineContext({IDLE_MODE: False})),
+            pipeline_ctx=PipelineContext(d={"index": index, "input": input}),
             src_key="input")
 
         # Target.

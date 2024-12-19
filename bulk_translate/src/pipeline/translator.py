@@ -1,5 +1,3 @@
-from arekit.common.data.input.providers.const import IDLE_MODE
-from arekit.common.pipeline.conts import PARENT_CTX
 from arekit.common.entities.base import Entity
 from arekit.common.pipeline.context import PipelineContext
 from arekit.common.pipeline.items.base import BasePipelineItem
@@ -120,16 +118,6 @@ class MLTextTranslatorPipelineItem(BasePipelineItem):
     def apply_core(self, input_data, pipeline_ctx):
         assert(isinstance(pipeline_ctx, PipelineContext))
         assert(isinstance(input_data, list))
-
-        # Check the pipeline state whether is an idle mode or not.
-        parent_ctx = pipeline_ctx.provide(PARENT_CTX)
-        idle_mode = parent_ctx.provide(IDLE_MODE)
-
-        # When pipeline utilized only for the assessing the expected amount
-        # of rows (common case of idle_mode), there is no need to perform
-        # translation.
-        if idle_mode:
-            return
 
         fast_accurate = self.fast_most_accurate_approach(input_data)
         return self.default_pre_part_splitting_approach(input_data) \
