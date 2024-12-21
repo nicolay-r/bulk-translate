@@ -1,6 +1,7 @@
-from arekit.common.entities.base import Entity
 from arekit.common.pipeline.context import PipelineContext
 from arekit.common.pipeline.items.base import BasePipelineItem
+
+from bulk_translate.src.span import Span
 
 
 class MLTextTranslatorPipelineItem(BasePipelineItem):
@@ -32,7 +33,7 @@ class MLTextTranslatorPipelineItem(BasePipelineItem):
         for part in input_data:
             if isinstance(part, str) and part.strip():
                 parts_to_join.append(part)
-            elif isinstance(part, Entity):
+            elif isinstance(part, Span):
                 entity_index = len(origin_entities)
                 parts_to_join.append(entity_placeholder_template.format(entity_index))
                 # Register entities information for further restoration.
@@ -94,7 +95,7 @@ class MLTextTranslatorPipelineItem(BasePipelineItem):
         for _, part in enumerate(input_data):
             if isinstance(part, str) and part.strip():
                 parts_to_join.append(part)
-            elif isinstance(part, Entity):
+            elif isinstance(part, Span):
                 # Register first the prior parts were merged.
                 __optionally_register(parts_to_join)
                 # Register entities information for further restoration.

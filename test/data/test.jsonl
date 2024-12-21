@@ -1,6 +1,6 @@
-{"text": ["It was in July, 1805, and the speaker was the well-known", ["Anna Pávlovna_Schérer"]]}
-{"text": ["maid of honor and favorite of the Empress", ["Márya_Fëdorovna"]]}
-{"text": ["With these words she greeted Prince", ["Vasíli Kurágin"], "a man of high"]}
+{"text": ["It was in July, 1805, and the speaker was the well-known", ["Anna Pávlovna_Schérer", "DATA"]]}
+{"text": ["maid of honor and favorite of the Empress", ["Márya_Fëdorovna", "DATA"]]}
+{"text": ["With these words she greeted Prince", ["Vasíli Kurágin", {"DATA":"1"}], "a man of high"]}
 {"text": ["rank and importance, who was the first to arrive at her reception.", ["Anna Pávlovna"]]}
 {"text": "had had a cough for some days. She was, as she said, suffering"}
 {"text": ["from la grippe; grippe being then a new word in", ["St._Petersburg"], "used only by the elite."]}

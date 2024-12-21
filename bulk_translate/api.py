@@ -1,4 +1,3 @@
-from arekit.common.entities.base import Entity
 from arekit.common.pipeline.batching import BatchingPipelineLauncher
 from arekit.common.pipeline.context import PipelineContext
 from arekit.common.pipeline.items.base import BasePipelineItem
@@ -7,6 +6,7 @@ from arekit.common.pipeline.utils import BatchIterator
 
 from bulk_translate.src.pipeline.translator import MLTextTranslatorPipelineItem
 from bulk_translate.src.service_prompt import DataService
+from bulk_translate.src.span import Span
 from bulk_translate.src.spans_parser import TextSpansParser
 from bulk_translate.src.utils import iter_params
 
@@ -19,7 +19,9 @@ class Translator(object):
             MLTextTranslatorPipelineItem(
                 batch_translate_model=translation_model.get_func(**custom_args_dict),
                 do_translate_entity=translate_spans),
-            MapPipelineItem(map_func=lambda term: [term.DisplayValue] if isinstance(term, Entity) else term),
+            MapPipelineItem(map_func=lambda term:
+                ([term.DisplayValue] + ([term.content] if term.content is not None else []))
+                if isinstance(term, Span) else term),
             BasePipelineItem(src_func=lambda src: list(src))
         ]
 
