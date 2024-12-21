@@ -2,7 +2,7 @@ import logging
 import sys
 
 
-def iter_params(text):
+def iter_params(text, keep_strings=True):
     assert(isinstance(text, str))
     beg = 0
     while beg < len(text):
@@ -11,9 +11,18 @@ def iter_params(text):
         except ValueError:
             break
         pe = text.index('}', beg+1)
+
+        # Yield prefix.
+        if beg < pb and keep_strings:
+            yield [text[beg:pb]]
+
         # Yield argument.
         yield text[pb+1:pe]
         beg = pe+1
+
+    # Yield suffix.
+    if beg < len(text) and keep_strings:
+        yield [text[beg:len(text)]]
 
 
 def parse_filepath(filepath, default_filepath=None, default_ext=None):

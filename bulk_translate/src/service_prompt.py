@@ -1,3 +1,6 @@
+import itertools
+
+
 class DataService(object):
 
     @staticmethod
@@ -10,6 +13,7 @@ class DataService(object):
         field_names = list(parse_fields_func(prompt))
         for row_id, data_dict in enumerate(data_dict_it):
             assert(isinstance(data_dict, dict))
-            fmt_d = [data_dict[col_name] for col_name in field_names]
-            assert(len(fmt_d) == 1)
-            yield row_id, fmt_d[0]
+            field_contents = [([data_dict[field_name]] if isinstance(data_dict[field_name], str) else data_dict[field_name])
+                              if isinstance(field_name, str) else field_name
+                              for field_name in field_names]
+            yield row_id, list(itertools.chain(*field_contents))
