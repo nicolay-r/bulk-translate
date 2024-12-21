@@ -1,3 +1,7 @@
+# This implementation has been tested for
+# googletrans==3.1.0a0
+
+
 import time
 
 from googletrans import Translator
