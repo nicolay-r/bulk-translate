@@ -82,8 +82,7 @@ if __name__ == '__main__':
     ner_model_name = params[1] if len(params) > 1 else params[-1]
     ner_model_params = ':'.join(params[2:]) if len(params) > 2 else None
 
-    translator = Translator(parse_spans=args.parse_entities,
-                            translate_spans=args.translate_entity,
+    translator = Translator(translate_spans=args.translate_entity,
                             translation_model=models_preset["dynamic"](),
                             **model_args_dict)
 

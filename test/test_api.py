@@ -6,7 +6,7 @@ from bulk_translate.src.service_dynamic import dynamic_init
 
 
 class TestTranslatorPipeline(unittest.TestCase):
-    text = "C'était en [juillet_1805] , et l'oratrice était la célèbre [Anna_Pavlovna]"
+    text = ["C'était en",  ["juillet 1805"] , "et l'oratrice était la célèbre", ["Anna Pavlovna"]]
 
     CURRENT_DIR = dirname(realpath(__file__))
 
@@ -15,8 +15,7 @@ class TestTranslatorPipeline(unittest.TestCase):
                                          class_filepath="googletrans_310a.py",
                                          class_name="GoogleTranslateModel")()
 
-        translator = Translator(parse_spans=True,
-                                translate_spans=False,
+        translator = Translator(translate_spans=False,
                                 translation_model=translation_model,
                                 # custom args
                                 src="auto",

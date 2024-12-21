@@ -10,5 +10,6 @@ class DataService(object):
         field_names = list(parse_fields_func(prompt))
         for row_id, data_dict in enumerate(data_dict_it):
             assert(isinstance(data_dict, dict))
-            fmt_d = {col_name: data_dict[col_name] for col_name in field_names}
-            yield row_id, prompt.format(**fmt_d)
+            fmt_d = [data_dict[col_name] for col_name in field_names]
+            assert(len(fmt_d) == 1)
+            yield row_id, fmt_d[0]

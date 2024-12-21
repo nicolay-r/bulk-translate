@@ -4,22 +4,21 @@ from arekit.common.pipeline.context import PipelineContext
 from arekit.common.pipeline.items.base import BasePipelineItem
 from arekit.common.pipeline.items.map import MapPipelineItem
 from arekit.common.pipeline.utils import BatchIterator
-from arekit.contrib.utils.pipelines.items.text.entities_default import TextEntitiesParser
 
 from bulk_translate.src.pipeline.translator import MLTextTranslatorPipelineItem
 from bulk_translate.src.service_prompt import DataService
+from bulk_translate.src.spans_parser import TextSpansParser
 from bulk_translate.src.utils import iter_params
 
 
 class Translator(object):
 
-    def __init__(self, parse_spans, translate_spans, translation_model, **custom_args_dict):
+    def __init__(self, translate_spans, translation_model, **custom_args_dict):
         self.pipeline = [
-            TextEntitiesParser(src_func=lambda text: text.split()) if parse_spans else None,
+            TextSpansParser(src_func=lambda text: [text] if isinstance(text, str) else text),
             MLTextTranslatorPipelineItem(
                 batch_translate_model=translation_model.get_func(**custom_args_dict),
-                do_translate_entity=translate_spans,
-                src_func=lambda item: [item] if not parse_spans else item),
+                do_translate_entity=translate_spans),
             MapPipelineItem(map_func=lambda term: [term.DisplayValue] if isinstance(term, Entity) else term),
             BasePipelineItem(src_func=lambda src: list(src))
         ]
