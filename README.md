@@ -7,11 +7,13 @@
 
 A tiny Python no-string package for performing translation of a massive `CSV`/`JSONL` files that 
 natively provides support of pre-annotated **fixed-spans** that are invariant for translator.
+
+## Features
   
 <details>
 <summary>
 
-### More on spans
+### 📘 More on spans
 
 </summary>
 
@@ -36,6 +38,12 @@ pip install git+https://github.com/nicolay-r/bulk-translate
 ```
 
 ## Usage
+
+### API
+
+Please take a look at the [**related Wiki page**](https://github.com/nicolay-r/bulk-translate/wiki)
+
+### Command Line / Shell 
 
 > **NOTE:** If you wish to translate parse entities, you can use `parse-entities` flag
 
