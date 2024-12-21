@@ -1,3 +1,2 @@
-arekit==0.25.0
-googletrans==3.1.0a0
+arekit==0.25.1
 source_iter==0.24.2
