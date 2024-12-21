@@ -31,10 +31,17 @@ if __name__ == '__main__':
     parser.add_argument('--translate-entity', action='store_true', default=False)
     parser.add_argument('--chunk-limit', dest='chunk_limit', type=int, default=128)
 
-    native_args, model_args = CmdArgsService.partition_list(lst=sys.argv, sep="%%")
-    custom_args_dict = CmdArgsService.args_to_dict(model_args)
-
+    # Extract native arguments.
+    native_args = CmdArgsService.extract_native_args(sys.argv, end_prefix="%%")
     args = parser.parse_args(args=native_args[1:])
+
+    # Extract csv-related arguments.
+    csv_args = CmdArgsService.find_grouped_args(lst=sys.argv, starts_with="%%csv", end_prefix="%%")
+    csv_args_dict = CmdArgsService.args_to_dict(csv_args)
+
+    # Extract model-related arguments and Initialize Large Language Model.
+    model_args = CmdArgsService.find_grouped_args(lst=sys.argv, starts_with="%%m", end_prefix="%%")
+    model_args_dict = CmdArgsService.args_to_dict(model_args)
 
     # Provide the default output.
     if args.output is None and args.src is not None:
@@ -47,11 +54,11 @@ if __name__ == '__main__':
                                                 prompt=args.prompt,
                                                 batch_size=args.batch_size)),
         "csv": lambda filepath: CsvService.read(src=filepath, as_dict=True, skip_header=True,
-                                                delimiter=custom_args_dict.get("delimiter", ","),
-                                                escapechar=custom_args_dict.get("escapechar", None)),
+                                                delimiter=csv_args_dict.get("delimiter", ","),
+                                                escapechar=csv_args_dict.get("escapechar", None)),
         "tsv": lambda filepath: CsvService.read(src=filepath, as_dict=True, skip_header=True,
-                                                delimiter=custom_args_dict.get("delimiter", "\t"),
-                                                escapechar=custom_args_dict.get("escapechar", None)),
+                                                delimiter=csv_args_dict.get("delimiter", "\t"),
+                                                escapechar=csv_args_dict.get("escapechar", None)),
         "jsonl": lambda filepath: JsonlService.read(src=filepath)
     }
 
@@ -62,7 +69,7 @@ if __name__ == '__main__':
     models_preset = {
         "dynamic": lambda: dynamic_init(src_dir=CWD, class_filepath=ner_model_name, class_name=ner_model_params)(
             # The rest of parameters could be provided from cmd.
-            **custom_args_dict)
+            **model_args_dict)
     }
 
     # Parse the model name.
@@ -78,7 +85,7 @@ if __name__ == '__main__':
     translator = Translator(parse_spans=args.parse_entities,
                             translate_spans=args.translate_entity,
                             translation_model=models_preset["dynamic"](),
-                            **custom_args_dict)
+                            **model_args_dict)
 
     translation_model = models_preset["dynamic"]()
 

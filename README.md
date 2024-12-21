@@ -39,7 +39,7 @@ python -m bulk_translate.translate \
     --adapter "dynamic:models/googletrans_310a.py:GoogleTranslateModel" \
     --output "test-translated.jsonl" \
     --parse-entities \
-    %% \
+    %%m \
     --src "auto" \
     --dest "ru"
 ```
