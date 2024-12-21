@@ -1,16 +1,25 @@
 # bulk-translate 0.24.1
 ![](https://img.shields.io/badge/Python-3.9-brightgreen.svg)
-![](https://img.shields.io/badge/AREkit-0.25.0-orange.svg)
+![](https://img.shields.io/badge/AREkit-0.25.1-orange.svg)
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/nicolay-r/bulk-translate/blob/master/bulk_translate_demo.ipynb)
 [![PyPI downloads](https://img.shields.io/pypi/dm/bulk-translate.svg)](https://pypistats.org/packages/bulk-translate)
 
 
 A tiny Python no-string package for performing translation of a massive `CSV`/`JSONL` files that 
-natively provides support for annotating **fixed-spans** that are optionally invariant for translator.
+natively provides support of pre-annotated **fixed-spans** that are invariant for translator.
   
+<details>
+<summary>
+
+### More on spans
+
+</summary>
+
 <p align="center">
     <img src="example.png"  width="600"/>
 </p>
+
+</details>
 
 The out-of-the box features of the `bulk-translate` are:
 * ✅ Support of the `spans` for annotation / optional translation.
