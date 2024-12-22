@@ -1,10 +1,9 @@
-from arekit.common.pipeline.batching import BatchingPipelineLauncher
-from arekit.common.pipeline.context import PipelineContext
-from arekit.common.pipeline.items.base import BasePipelineItem
-from arekit.common.pipeline.items.map import MapPipelineItem
-from arekit.common.pipeline.utils import BatchIterator
-
+from bulk_translate.src.pipeline.context import PipelineContext
+from bulk_translate.src.pipeline.items.base import BasePipelineItem
+from bulk_translate.src.pipeline.items.map import MapPipelineItem
+from bulk_translate.src.pipeline.launcher import BatchingPipelineLauncher
 from bulk_translate.src.pipeline.translator import MLTextTranslatorPipelineItem
+from bulk_translate.src.pipeline.utils import BatchIterator
 from bulk_translate.src.service_prompt import DataService
 from bulk_translate.src.span import Span
 from bulk_translate.src.spans_parser import TextSpansParser
@@ -40,9 +39,6 @@ class Translator(object):
 
             # Target.
             d = ctx._d
-
-            for m in ['parent_ctx']:
-                del d[m]
 
             for batch_ind in range(len(d["input"])):
                 yield {k: v[batch_ind] for k, v in d.items()}

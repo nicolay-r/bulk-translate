@@ -1,6 +1,5 @@
 # bulk-translate 0.25.0
 ![](https://img.shields.io/badge/Python-3.9-brightgreen.svg)
-![](https://img.shields.io/badge/AREkit-0.25.1-orange.svg)
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/nicolay-r/bulk-translate/blob/master/bulk_translate_demo.ipynb)
 [![PyPI downloads](https://img.shields.io/pypi/dm/bulk-translate.svg)](https://pypistats.org/packages/bulk-translate)
 
@@ -78,7 +77,7 @@ python -m bulk_translate.translate \
 
 ## Powered by
 
-* AREkit [[github]](https://github.com/nicolay-r/AREkit)
+The pipeline construction components were taken from AREkit [[github]](https://github.com/nicolay-r/AREkit)
 
 <p float="left">
 <a href="https://github.com/nicolay-r/AREkit"><img src="https://github.com/nicolay-r/ARElight/assets/14871187/01232f7a-970f-416c-b7a4-1cda48506afe"/></a>

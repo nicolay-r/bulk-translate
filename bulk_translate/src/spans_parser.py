@@ -1,5 +1,4 @@
-from arekit.common.pipeline.items.base import BasePipelineItem
-
+from bulk_translate.src.pipeline.items.base import BasePipelineItem
 from bulk_translate.src.span import Span
 
 
