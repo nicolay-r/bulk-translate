@@ -15,7 +15,7 @@ def get_requirements(filenames):
 
 setup(
     name='bulk_translate',
-    version='0.24.1',
+    version='0.25.0',
     python_requires=">=3.6",
     description='A tiny Python no-string package for performing translation '
                 'of a massive CSV/JSONL files with optionally pre-annotated object spans',
