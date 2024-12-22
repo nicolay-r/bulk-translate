@@ -59,7 +59,9 @@ Please take a look at the [**related Wiki page**](https://github.com/nicolay-r/b
 
 ### Command Line / Shell 
 
-> **NOTE:** Spans supports only in JSON-lines format
+> **NOTE:** Spans supports only in JSON-lines format.
+ 
+> **NOTE:** Requires `source_iter` package installation.
 
 For the following [`test.tsv` example data](/test/data/test.tsv) with annotated entities enclosed in square brackets:
 
