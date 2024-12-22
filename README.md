@@ -11,13 +11,12 @@
 A tiny Python no-string package for performing translation of a massive `CSV`/`JSONL` files that 
 natively provides support of pre-annotated **fixed-spans** that are invariant for translator.
 
-## Features
+## Description
   
 <details>
 <summary>
-
+  
 ### 📘 More on spans
-
 </summary>
 
 <p align="center">
@@ -25,6 +24,11 @@ natively provides support of pre-annotated **fixed-spans** that are invariant fo
 </p>
 
 </details>
+<details>
+<summary>
+
+### 📘 `bulk-translate` features
+</summary>
 
 The out-of-the box features of the `bulk-translate` are:
 * ✅ Support of the `spans` for annotation / optional translation.
@@ -33,9 +37,17 @@ The out-of-the box features of the `bulk-translate` are:
   - `accurate`: performs individual translation of each text part.
 * ✅ No strings: you're free to adopt any LM / LLM backend.
   - Support `googletrans` by default.
+ 
+</details>
 
 ## Installation
 
+From PyPI: 
+```bash
+pip install bulk-translate
+```
+
+or latest version from here:
 ```bash
 pip install git+https://github.com/nicolay-r/bulk-translate
 ```
