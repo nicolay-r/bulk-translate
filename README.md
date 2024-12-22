@@ -60,7 +60,7 @@ Please take a look at the [**related Wiki page**](https://github.com/nicolay-r/b
 
 ### Command Line / Shell 
 
-> **NOTE:** If you wish to translate parse entities, you can use `parse-entities` flag
+> **NOTE:** Spans supports only in JSON-lines format
 
 For the following [`test.tsv` example data](/test/data/test.tsv) with annotated entities enclosed in square brackets:
 
@@ -70,7 +70,6 @@ python -m bulk_translate.translate \
     --prompt "{text}" \
     --adapter "dynamic:models/googletrans_310a.py:GoogleTranslateModel" \
     --output "test-translated.jsonl" \
-    --parse-entities \
     %%m \
     --src "auto" \
     --dest "ru"

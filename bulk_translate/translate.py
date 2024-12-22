@@ -27,7 +27,6 @@ if __name__ == '__main__':
     parser.add_argument('--prompt', dest='prompt', type=str, default="{text}")
     parser.add_argument('--src', dest='src', type=str, default=None)
     parser.add_argument('--output', dest='output', type=str, default=None)
-    parser.add_argument('--parse-entities', action='store_true', default=False)
     parser.add_argument('--translate-entity', action='store_true', default=False)
     parser.add_argument('--chunk-limit', dest='chunk_limit', type=int, default=128)
 
