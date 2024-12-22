@@ -4,6 +4,9 @@
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/nicolay-r/bulk-translate/blob/master/bulk_translate_demo.ipynb)
 [![PyPI downloads](https://img.shields.io/pypi/dm/bulk-translate.svg)](https://pypistats.org/packages/bulk-translate)
 
+<p align="center">
+    <img src="logo.png"/>
+</p>
 
 A tiny Python no-string package for performing translation of a massive `CSV`/`JSONL` files that 
 natively provides support of pre-annotated **fixed-spans** that are invariant for translator.
