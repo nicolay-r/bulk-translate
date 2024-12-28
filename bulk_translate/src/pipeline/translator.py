@@ -1,4 +1,3 @@
-from bulk_translate.src.pipeline.context import PipelineContext
 from bulk_translate.src.pipeline.items.base import BasePipelineItem
 from bulk_translate.src.span import Span
 
@@ -116,7 +115,6 @@ class MLTextTranslatorPipelineItem(BasePipelineItem):
         return translated_parts
 
     def apply_core(self, input_data, pipeline_ctx):
-        assert(isinstance(pipeline_ctx, PipelineContext))
         assert(isinstance(input_data, list))
 
         fast_accurate = self.fast_most_accurate_approach(input_data)
