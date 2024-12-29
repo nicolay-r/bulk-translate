@@ -25,7 +25,6 @@ class BasePipelineItem(object):
     def get_source(self, src_ctx, call_func=True, force_key=None):
         """ Extract input element for processing.
         """
-        assert(isinstance(src_ctx, PipelineContext))
 
         # If there is no information about key, then we consider absence of the source.
         if self.__src_key is None:

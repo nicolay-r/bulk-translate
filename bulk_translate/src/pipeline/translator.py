@@ -116,7 +116,6 @@ class MLTextTranslatorPipelineItem(BasePipelineItem):
         return translated_parts
 
     def apply_core(self, input_data, pipeline_ctx):
-        assert(isinstance(pipeline_ctx, PipelineContext))
         assert(isinstance(input_data, list))
 
         fast_accurate = self.fast_most_accurate_approach(input_data)
