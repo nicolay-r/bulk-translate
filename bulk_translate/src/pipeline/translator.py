@@ -1,18 +1,19 @@
+from bulk_translate.src.pipeline.context import PipelineContext
 from bulk_translate.src.pipeline.items.base import BasePipelineItem
-from bulk_translate.src.span import Span
 
 
 class MLTextTranslatorPipelineItem(BasePipelineItem):
     """ Machine learning based translator pipeline item.
     """
 
-    def __init__(self, batch_translate_model, do_translate_entity=True, **kwargs):
+    def __init__(self, batch_translate_model, is_span_func, do_translate_entity=True, **kwargs):
         """ Model, which is based on translation of the text,
             represented as a list of words.
         """
         super(MLTextTranslatorPipelineItem, self).__init__(**kwargs)
         self.__do_translate_entity = do_translate_entity
         self.__translate = batch_translate_model
+        self.__is_span = is_span_func
 
     def fast_most_accurate_approach(self, input_data, entity_placeholder_template="<entityTag={}/>"):
         """ This approach assumes that the translation won't corrupt the original
@@ -31,7 +32,7 @@ class MLTextTranslatorPipelineItem(BasePipelineItem):
         for part in input_data:
             if isinstance(part, str) and part.strip():
                 parts_to_join.append(part)
-            elif isinstance(part, Span):
+            elif self.__is_span(part):
                 entity_index = len(origin_entities)
                 parts_to_join.append(entity_placeholder_template.format(entity_index))
                 # Register entities information for further restoration.
@@ -93,7 +94,7 @@ class MLTextTranslatorPipelineItem(BasePipelineItem):
         for _, part in enumerate(input_data):
             if isinstance(part, str) and part.strip():
                 parts_to_join.append(part)
-            elif isinstance(part, Span):
+            elif self.__is_span(part):
                 # Register first the prior parts were merged.
                 __optionally_register(parts_to_join)
                 # Register entities information for further restoration.
@@ -115,6 +116,7 @@ class MLTextTranslatorPipelineItem(BasePipelineItem):
         return translated_parts
 
     def apply_core(self, input_data, pipeline_ctx):
+        assert(isinstance(pipeline_ctx, PipelineContext))
         assert(isinstance(input_data, list))
 
         fast_accurate = self.fast_most_accurate_approach(input_data)

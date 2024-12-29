@@ -17,7 +17,8 @@ class Translator(object):
             TextSpansParser(src_func=lambda text: [text] if isinstance(text, str) else text),
             MLTextTranslatorPipelineItem(
                 batch_translate_model=translation_model.get_func(**custom_args_dict),
-                do_translate_entity=translate_spans),
+                do_translate_entity=translate_spans,
+                is_span_func=lambda term: isinstance(term, Span)),
             MapPipelineItem(map_func=lambda term:
                 ([term.DisplayValue] + ([term.content] if term.content is not None else []))
                 if isinstance(term, Span) else term),
