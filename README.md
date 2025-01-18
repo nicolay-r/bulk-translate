@@ -56,7 +56,7 @@ pip install git+https://github.com/nicolay-r/bulk-translate
 
 ### API
 
-Please take a look at the [**related Wiki page**](https://github.com/nicolay-r/bulk-translate/wiki)
+### 👉 [Follow this notebook tutorial at `nlp-thirdgate`](https://github.com/nicolay-r/nlp-thirdgate/blob/master/tutorials/translate_texts_with_spans_via_googletrans.ipynb)
 
 ### Command Line / Shell 
 
