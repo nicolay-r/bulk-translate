@@ -7,6 +7,9 @@
 <p align="center">
     <img src="logo.png"/>
 </p>
+<p align="center">
+  <a href="https://github.com/nicolay-r/nlp-thirdgate?tab=readme-ov-file#text-translation"><b>Third-party providers hosting</b>↗️</a>
+</p>
 
 A tiny Python no-string package for performing translation of a massive `CSV`/`JSONL` files that 
 natively provides support of pre-annotated **fixed-spans** that are invariant for translator.
