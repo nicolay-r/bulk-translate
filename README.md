@@ -61,12 +61,8 @@ pip install git+https://github.com/nicolay-r/bulk-translate
 
 ### 👉 [Follow this notebook tutorial at `nlp-thirdgate`](https://github.com/nicolay-r/nlp-thirdgate/blob/master/tutorials/translate_texts_with_spans_via_googletrans.ipynb)
 
-<details>
-<summary>
 
-### Command Line / Shell 
-
-</summary>
+## Command Line / Shell 
 
 > **NOTE:** Spans supports only in JSON-lines format.
  
@@ -84,7 +80,6 @@ python -m bulk_translate.translate \
     --src "auto" \
     --dest "ru"
 ```
-</details>
 
 ## Powered by
 
