@@ -1,4 +1,4 @@
-# bulk-translate 0.25.1
+# bulk-translate 0.25.2
 ![](https://img.shields.io/badge/Python-3.9-brightgreen.svg)
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/nicolay-r/bulk-translate/blob/master/bulk_translate_demo.ipynb)
 [![twitter](https://img.shields.io/twitter/url/https/shields.io.svg?style=social)](https://x.com/nicolayr_/status/1871218031709323461)
