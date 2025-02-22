@@ -1,3 +1,4 @@
+import json
 import unittest
 from os.path import dirname, realpath, join
 
@@ -21,9 +22,14 @@ class TestTranslatorPipeline(unittest.TestCase):
                                 src="auto",
                                 dest="en")
 
+        content = [
+            {"text": TestTranslatorPipeline.text}
+        ]
+
         data_it = translator.iter_translated_data(
-            data_dict_it=[{"text": TestTranslatorPipeline.text}],
-            prompt="{text}")
+            data_dict_it=iter(content),
+            schema=json.loads('{"translated":"{text}"}')
+        )
 
         for d in data_it:
             print(d)

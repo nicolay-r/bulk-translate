@@ -1,11 +1,11 @@
-from bulk_translate.src.pipeline.context import PipelineContext
-
-
 class BasePipelineItem(object):
     """ Single pipeline item that might be instantiated and embedded into pipeline.
     """
 
-    def __init__(self, src_key="result", result_key="result", src_func=None):
+    DEFAULT_SOURCE_KEY = "result"
+    DEFAULT_RESULT_KEY = "result"
+
+    def __init__(self, src_key=DEFAULT_SOURCE_KEY, result_key=DEFAULT_RESULT_KEY, src_func=None):
         assert(isinstance(src_key, str) or src_key is None)
         assert(callable(src_func) or src_func is None)
         self.__src_key = src_key
@@ -25,7 +25,6 @@ class BasePipelineItem(object):
     def get_source(self, src_ctx, call_func=True, force_key=None):
         """ Extract input element for processing.
         """
-
         # If there is no information about key, then we consider absence of the source.
         if self.__src_key is None:
             return None

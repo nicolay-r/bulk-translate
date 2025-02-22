@@ -73,9 +73,10 @@ For the following [`test.tsv` example data](/test/data/test.tsv) with annotated 
 ```bash
 python -m bulk_translate.translate \
     --src "test/data/test.tsv" \
-    --prompt "{text}" \
+    --schema '{"translated":"{text}"}' \
     --adapter "dynamic:models/googletrans_310a.py:GoogleTranslateModel" \
     --output "test-translated.jsonl" \
+    --batch-size 10 \
     %%m \
     --src "auto" \
     --dest "ru"

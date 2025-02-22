@@ -1,4 +1,5 @@
 import argparse
+import json
 import os
 import sys
 
@@ -24,7 +25,10 @@ if __name__ == '__main__':
 
     parser.add_argument('--adapter', dest='adapter', type=str, default=None)
     parser.add_argument('--batch-size', dest='batch_size', type=int, default=1)
-    parser.add_argument('--prompt', dest='prompt', type=str, default="{text}")
+    parser.add_argument('--prompt', dest='prompt', type=str, default=None)
+    parser.add_argument('--keep-prompt', action='store_true', default=False)
+    parser.add_argument('--default-field-output', dest='default_field_output', default="output")
+    parser.add_argument('--schema', dest='schema', type=str, default=None)
     parser.add_argument('--src', dest='src', type=str, default=None)
     parser.add_argument('--output', dest='output', type=str, default=None)
     parser.add_argument('--translate-entity', action='store_true', default=False)
@@ -33,6 +37,14 @@ if __name__ == '__main__':
     # Extract native arguments.
     native_args = CmdArgsService.extract_native_args(sys.argv, end_prefix="%%")
     args = parser.parse_args(args=native_args[1:])
+    
+    # Reading the prompting schema.
+    if args.prompt is not None and args.schema is not None:
+        raise Exception("Error: you can't set both schema and prompt!")
+    if args.prompt is not None:
+        schema = {args.default_field_output: args.prompt}
+    else:
+        schema = json.loads(args.schema)
 
     # Extract csv-related arguments.
     csv_args = CmdArgsService.find_grouped_args(lst=sys.argv, starts_with="%%csv", end_prefix="%%")
@@ -50,7 +62,8 @@ if __name__ == '__main__':
         None: lambda _: test_translate_demo(
             iter_answers=lambda example, lang_from, lang_to:
                 translator.iter_translated_data(data_dict_it=iter([(0, example)]),
-                                                prompt=args.prompt,
+                                                schema=schema,
+                                                keep_prompt=args.keep_prompt,
                                                 batch_size=args.batch_size)),
         "csv": lambda filepath: CsvService.read(src=filepath, as_dict=True, skip_header=True,
                                                 delimiter=csv_args_dict.get("delimiter", ","),
@@ -94,7 +107,7 @@ if __name__ == '__main__':
     if src_ext is None:
         exit(0)
 
-    ctxs_it = translator.iter_translated_data(data_dict_it=texts_it, prompt=args.prompt, batch_size=args.batch_size)
+    ctxs_it = translator.iter_translated_data(data_dict_it=texts_it, schema=schema, batch_size=args.batch_size)
     output_formatters["jsonl"](dicts_it=tqdm(ctxs_it, desc=f"Processing `{args.src}`"))
 
     logger.info(f"Saved: {args.output}")

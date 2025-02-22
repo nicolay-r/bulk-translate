@@ -11,9 +11,9 @@ class DataService(object):
         """
         assert(callable(parse_fields_func))
         field_names = list(parse_fields_func(prompt))
-        for row_id, data_dict in enumerate(data_dict_it):
+        for data_dict in data_dict_it:
             assert(isinstance(data_dict, dict))
             field_contents = [([data_dict[field_name]] if isinstance(data_dict[field_name], str) else data_dict[field_name])
                               if isinstance(field_name, str) else field_name
                               for field_name in field_names]
-            yield row_id, list(itertools.chain(*field_contents))
+            yield list(itertools.chain(*field_contents))

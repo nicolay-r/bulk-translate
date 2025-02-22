@@ -25,21 +25,43 @@ class Translator(object):
             BasePipelineItem(src_func=lambda src: list(src))
         ]
 
-    def iter_translated_data(self, data_dict_it, prompt, batch_size=1):
+    def handle_batch(self, batch, col_output, col_prompt=None):
+        assert(isinstance(batch, list))
+
+        if col_prompt is None:
+            col_prompt = col_output
+
+        ctx = BatchingPipelineLauncher.run(pipeline=self.pipeline,
+                                           pipeline_ctx=PipelineContext(d={col_prompt: batch}),
+                                           src_key=col_prompt)
+
+        # Target.
+        d = ctx._d
+
+        for batch_ind in range(len(d[col_prompt])):
+
+            yield {(k if k != BasePipelineItem.DEFAULT_RESULT_KEY else col_output):
+                       v[batch_ind] for k, v in d.items()}
+
+    def iter_translated_data(self, data_dict_it, schema, batch_size=1, keep_prompt=False):
         """ This is the main API method for calling.
         """
+        assert(isinstance(schema, dict))
 
-        prompts_it = DataService.iter_prompt(data_dict_it=data_dict_it, prompt=prompt, parse_fields_func=iter_params)
+        for data_batch in BatchIterator(data_dict_it, batch_size=batch_size):
+            for col_output, prompt in schema.items():
 
-        for batch in BatchIterator(prompts_it, batch_size=batch_size):
-            index, input = zip(*batch)
-            ctx = BatchingPipelineLauncher.run(
-                pipeline=self.pipeline,
-                pipeline_ctx=PipelineContext(d={"index": index, "input": input}),
-                src_key="input")
+                prompts_it = DataService.iter_prompt(data_dict_it=data_batch,
+                                                     prompt=prompt,
+                                                     parse_fields_func=iter_params)
 
-            # Target.
-            d = ctx._d
+                handled_data_it = self.handle_batch(batch=list(prompts_it),
+                                                    col_output=col_output,
+                                                    col_prompt=f"prompt_{col_output}" if keep_prompt else None)
 
-            for batch_ind in range(len(d["input"])):
-                yield {k: v[batch_ind] for k, v in d.items()}
+                # Applying updated content from the handled column.
+                for record_ind, record in enumerate(handled_data_it):
+                    data_batch[record_ind] |= record
+
+            for item in data_batch:
+                yield item
